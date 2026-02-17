@@ -58,7 +58,7 @@ Ensure these are ready before starting:
 
 ## 🛠️ HAProxy Setup (Load Balancing Foundation)
 
-### Install Latest HAProxy (PPA Method) 
+### Installation (PPA Method) 
 
 1. Add Official PPA
 ```bash
@@ -78,7 +78,7 @@ sudo apt install haproxy -y
 haproxy -v #(Should show version, e.g., 3.2+ on Ubuntu 24.04.4)
 ```
 
-### Configure HAProxy
+### Configuration
 Edit HAProxy config file  
 ```bash
 sudo nano /etc/haproxy/haproxy.cfg
