@@ -56,7 +56,7 @@ Ensure these are ready before starting:
 - Cloudflare account (FREE tier works!)
 - Domain added to Cloudflare
 
-## 🛠️ HAProxy Setup (Load Balancing Foundation)
+## ⚖️ HAProxy Setup (Load Balancing Foundation)
 
 ### Installation (PPA Method) 
 
