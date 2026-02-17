@@ -163,7 +163,10 @@ cloudflared tunnel create my-haproxy-tunnel
 ```
 2. json file will be created in ` /root/.cloudflared/ `. (eg., {UUID}.json)
 3. Copy the UUID (e.g., a1b2c3d4-c3d4...)
-4. To verify the tunnel ` cloudflared tunnel list `
+4. To verify the tunnel
+```bash
+cloudflared tunnel list
+```
 
 ### Configure Tunnel
 
