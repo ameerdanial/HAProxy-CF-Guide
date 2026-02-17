@@ -15,7 +15,7 @@ Perfect for: Homelabs, small businesses, game servers, or anyone tired of port f
 
 | Component                | Subdomain/Service  | Magic Delivered                                                    |
 | ------------------------ | ------------------ | ------------------------------------------------------------------ |
-| 🌐 HAProxy Load Balancer | ha1.yourdomain.com | Round-robin to web servers (192.168.1.10:80, etc.) + health checks |
+| 🌐 HAProxy LoadBalancer | yourdomain.com | Round-robin to web servers (192.168.1.10:80, etc.) + health checks |
 | ☁️ Cloudflare DNS        | All subdomains     | CNAME → tunnel UUID + automatic HTTPS + DDoS protection            |
 | 🔄 Domain Routing        | Any hostname       | config.yml ingress rules route to specific ports/services          |
 | 🛡️ Zero Port Exposure   | Entire server      | Cloudflare Tunnel = no public ports open                           |
