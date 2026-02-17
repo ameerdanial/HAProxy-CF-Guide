@@ -1,4 +1,4 @@
-# HAProxy + Cloudflare Tunnel: 🚀 Zero Port Forwarding Powerhouse 
+# HAProxy + CF Tunnel: 🚀 Zero Port Forwarding Powerhouse 
 
 ### Transform your Ubuntu server into a production-grade, zero-port-exposure powerhouse that:
 
