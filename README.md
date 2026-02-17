@@ -275,4 +275,25 @@ sudo journalctl -u haproxy -f
 sudo journalctl -u cloudflared -f
 ```
 
+## 🛠️ Troubleshooting
+
+| Issue                 | Symptoms                          | Fix                                                   |
+| --------------------- | --------------------------------- | ----------------------------------------------------- |
+| 502 Bad Gateway       | Cloudflare → HAProxy              | `sudo ss -tlnp                                        |
+| Tunnel not connecting | cloudflared logs show auth errors | Re-run cloudflared tunnel login                       |
+| DNS not resolving     | nslookup yourdomain.com fails     | Check CNAME target + Proxy status (orange cloud)      |
+| Backend servers down  | HAProxy logs: "server down"       | Test backends: curl http://192.168.1.10:80            |
+| HTTPS redirect loop   | Infinite redirect                 | HAProxy config: use mode http + bind *:80             |
+| Service won't start   | systemctl status failed           | journalctl -u cloudflared -f + check config.yml paths |
+| "No such tunnel"      | Tunnel UUID wrong                 | cloudflared tunnel list + verify config.yml           |
+
+### Quick Debug Commands:
+
+Full system check
+```bash
+sudo systemctl status haproxy cloudflared
+sudo ss -tlnp | grep -E "(haproxy|cloudflared)"
+curl -I https://yourdomain.com || echo "HTTPS failed"
+```
+
 
