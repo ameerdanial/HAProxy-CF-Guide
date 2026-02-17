@@ -75,7 +75,7 @@ sudo apt install haproxy -y
 ```
 4. Verify Installation
 ```bash
-haproxy -v #(Should show version, e.g., 3.2+ on Ubuntu 24.04.4)
+haproxy -v # Should show version, e.g., 3.2+ on Ubuntu 24.04.4
 ```
 
 ### Configuration
