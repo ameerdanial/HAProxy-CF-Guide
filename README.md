@@ -42,7 +42,9 @@ Ensure these are ready before starting:
 - Cloudflare account with your domain added/managed (free tier works).  
 - Domain ready: Add a CNAME record later (e.g., tunnel.example.com → {UUID}.cfargotunnel.com).  
 
-## HAProxy Installation Steps
+## HAProxy Setup
+
+### Installation  
 
 >For the latest official PPA version, check on https://haproxy.debian.net  
 
@@ -52,7 +54,7 @@ Ensure these are ready before starting:
 4. Verify: ` haproxy -v ` (shows version, e.g., 3.2+ on Ubuntu 24.04.4)  
 
 
-## HAProxy Configuration
+### Configuration
 
 Edit ` /etc/haproxy/haproxy.cfg ` with ` sudo nano /etc/haproxy/haproxy.cfg `.  
 Here's a simple HTTP load-balancing example for two backend web servers (replace IPs/ports):  
@@ -82,7 +84,7 @@ backend webservers
     server web2 192.168.1.11:80 check
 ```
 
-### Test & Restart HAProxy
+### Test & Restart
 
 - Test config:
   - ` sudo haproxy -c -f /etc/haproxy/haproxy.cfg `
@@ -122,8 +124,7 @@ cloudflared version
 cloudflared tunnel login
 ```
 2. Open the provided link to the browser, login and authorize
-3. Download the Cert.pem
-4. Use WinSCP and place it to ` /root/.cloudflared/ `
+3. Once the Cloudflare Account been authorized, the ` cert.pem ` will appear at ` /root/.cloudflared/ `
 
 ### Create Tunnel
 
@@ -132,34 +133,33 @@ cloudflared tunnel login
 cloudflared tunnel create example-tunnel
 ```
 2. json file will be created in ` /root/.cloudflared/ `. (eg., {UUID}.json)
-2. Copy the UUID (e.g., a1b2c3d4-...)
+3. Copy the UUID (e.g., a1b2c3d4-c3d4...)
+4. To check tunnel ` cloudflared tunnel list `
 
 ### Configure Tunnel
 
-1. Create Cloudflare config directory and file
+1. Create file
 ```bash
-sudo mkdir -p /etc/cloudflared
-sudo mkdir -p /etc/cloudflared/exp1
-sudo nano /etc/cloudflared/exp1/config.yml
+sudo nano /root/.cloudflared/config.yml
 ```
 2. Create Cloudflare config file
-```bash
-tunnel: example-tunnel
-credentials-file: /root/.cloudflared/dir1/YOUR-UUID-HERE.json
+```yml
+tunnel: <your-tunnel-UUID>
+credentials-file: /root/.cloudflared/<your-tunnel-UUID>.json
 
 ingress:
-  - hostname: example.domain.com
-    service: http://localhost:80
+  - hostname: yourdomain.com
+    service: https://localhost:443
   - service: http_status:404
 ```
-
- > Replace "exp1" with your suitability  
+6. Route DNS: ` cloudflared tunnel route dns my-haproxy-tunnel yourdomain.com `
+7. Test run: ` cloudflared tunnel --config /etc/cloudflared/config.yml run `
 
 ### Test Tunnel
 
 Test the configured tunnel
 ```bash
-cloudflared tunnel --config /etc/cloudflared/exp1/config.yml run example-tunnel
+cloudflared tunnel --config /etc/cloudflared/config.yml run example-tunnel
 ```
 
 ## Cloudflared DNS Setup
@@ -174,6 +174,49 @@ cloudflared tunnel --config /etc/cloudflared/exp1/config.yml run example-tunnel
    - Proxy status: Proxied (orange cloud ⚡)
    - Save
 
-## Run as Service
+## Run as Production Service
+
+sudo cloudflared service install /etc/cloudflared/config.yml  
+sudo systemctl start cloudflared  
+sudo systemctl enable cloudflared  
+sudo systemctl status cloudflared  
+
+cloudflared service install (uses config.yml)  
+nano 
+Enable/start: sudo systemctl enable cloudflared && sudo systemctl start cloudflared. 
+Check status: sudo systemctl status cloudflared 
+logs: journalctl -u cloudflared -f
+
+## Final Testing
+
+Test Domain
+```Bash
+curl -I https://example.domain.com
+```
+Test TCP Connection
+```bash
+nc -zv 172.20.20.201 80
+telnet 127.0.0.1 80
+```
+
+### File Locations (Reference)
+
+```yml
+/root/.cloudflared/
+├── cert.pem
+└── YOUR-UUID.json
+└── config.yml
+
+/etc/haproxy/
+└── haproxy.cfg
+```
+
+## Monitoring Commands
+
+sudo ss -tlnp | grep haproxy  
+
+Logs  
+sudo journalctl -u haproxy -f  
+sudo journalctl -u cloudflared -f  
 
 
