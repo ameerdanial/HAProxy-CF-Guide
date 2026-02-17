@@ -46,7 +46,7 @@ Ensure these are ready before starting:
 ### HAProxy Requirements
 
 - OS: Ubuntu 24.04.4 LTS+ (latest packages) 
-- Hardware: 1 vCPU, 1-2GB RAM, 10GB+ storage (scales with traffic. e.g., 4GB+ RAM for high-load balancing).  
+- Hardware: 1 vCPU, 1-2GB RAM, 10GB+ storage (scales with traffic. e.g., 4GB+ RAM for high-load balancing)  
 - Network: Ports 80/443 open (UFW: ufw allow 80)
 - Dependencies: Root/sudo access
 
@@ -79,7 +79,10 @@ haproxy -v #(Should show version, e.g., 3.2+ on Ubuntu 24.04.4)
 ```
 
 ### Configure HAProxy
-Edit ` /etc/haproxy/haproxy.cfg ` with ` sudo nano /etc/haproxy/haproxy.cfg `.  
+Edit ` /etc/haproxy/haproxy.cfg `  
+```bash
+sudo nano /etc/haproxy/haproxy.cfg
+```
 
 Here's a simple HTTP load-balancing example for two backend web servers (replace IPs/ports):  
 
