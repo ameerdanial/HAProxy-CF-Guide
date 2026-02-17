@@ -117,15 +117,22 @@ backend webservers
 ```bash  
 sudo sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 ```
-2. Start the service automatically on system boot
+2. Refresh Config
+```bash
+sudo systemctl restart haproxy
+```
+3. Start the service automatically on system boot
 ```bash
 sudo systemctl enable haproxy && sudo systemctl start haproxy
 ```
-3. Check service status
+4. Verify service status
 ```bash
 sudo systemctl status haproxy
 ```
-4. sudo ss -tlnp | grep haproxy # Should show :80
+5. Verify port
+```bash
+sudo ss -tlnp | grep haproxy # Should show :80
+```
 
 ## 🌥️ Cloudflared Tunnel Setup (The Zero-Port Magic)
 
