@@ -82,30 +82,98 @@ backend webservers
     server web2 192.168.1.11:80 check
 ```
 
-- To test config:
+### Test & Restart HAProxy
+
+- Test config:
   - ` sudo haproxy -c -f /etc/haproxy/haproxy.cfg `
-- To run config on startup:
+- Run config on startup:
   - Enable on boot: ` sudo systemctl enable haproxy `.
   - Restart: ` sudo systemctl restart haproxy `.
-- To verify config:
+- Verify config:
   - Check status: ` sudo systemctl status haproxy `.
   - sudo ss -tlnp | grep haproxy  (Should show :80 and :8404)
 
-## Cloudflared Tunneling Configuration
+## Cloudflared Tunnel Setup
 
+### Installation 
 
-
-
-## Installation
-
+1. Add cloudflare gpg key
 ```bash
-sudo apt update
-sudo apt install openjdk-21-jdk
+sudo mkdir -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | sudo tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null
+```
+2. Add this repo to your apt repositories
+```bash
+echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+```
+3. Install Cloudflare
+```bash  
+sudo apt-get update && sudo apt-get install cloudflared
+```
+4. Check version
+```bash
+cloudflared version
 ```
 
-> Make sure Java is installed first.
+### Authentication
 
-## Checklist
-- [x] Install Java
-- [ ] Download server jar
-- [ ] Configure firewall
+1. Login to Cloudflare tunnel  
+```bash
+cloudflared tunnel login
+```
+2. Open the provided link to the browser, login and authorize
+3. Download the Cert.pem
+4. Use WinSCP and place it to ` /root/.cloudflared/ `
+
+### Create Tunnel
+
+1. Create the tunnel
+```bash
+cloudflared tunnel create example-tunnel
+```
+2. json file will be created in ` /root/.cloudflared/ `. (eg., {UUID}.json)
+2. Copy the UUID (e.g., a1b2c3d4-...)
+
+### Configure Tunnel
+
+1. Create Cloudflare config directory and file
+```bash
+sudo mkdir -p /etc/cloudflared
+sudo mkdir -p /etc/cloudflared/exp1
+sudo nano /etc/cloudflared/exp1/config.yml
+```
+2. Create Cloudflare config file
+```bash
+tunnel: example-tunnel
+credentials-file: /root/.cloudflared/dir1/YOUR-UUID-HERE.json
+
+ingress:
+  - hostname: example.domain.com
+    service: http://localhost:80
+  - service: http_status:404
+```
+
+ > Replace "exp1" with your suitability  
+
+### Test Tunnel
+
+Test the configured tunnel
+```bash
+cloudflared tunnel --config /etc/cloudflared/exp1/config.yml run example-tunnel
+```
+
+## Cloudflared DNS Setup
+
+### Cloudflare Dashboard
+
+1. Login → Your Domain → DNS tab
+2. Add Record:
+   - Type: CNAME
+   - Name: example (creates example.domain.com)
+   - Target: YOUR-UUID-HERE.cfargotunnel.com
+   - Proxy status: Proxied (orange cloud ⚡)
+   - Save
+
+## Run as Service
+
+
