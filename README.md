@@ -79,7 +79,7 @@ haproxy -v #(Should show version, e.g., 3.2+ on Ubuntu 24.04.4)
 ```
 
 ### Configure HAProxy
-Edit ` /etc/haproxy/haproxy.cfg `  
+Edit HAProxy config file  
 ```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
