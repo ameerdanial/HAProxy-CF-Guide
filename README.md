@@ -105,7 +105,7 @@ backend webservers
 sudo mkdir -p --mode=0755 /usr/share/keyrings
 curl -fsSL https://pkg.cloudflare.com/cloudflare-public-v2.gpg | sudo tee /usr/share/keyrings/cloudflare-public-v2.gpg >/dev/null
 ```
-2. Add this repo to your apt repositories
+2. Add this repo to apt repositories
 ```bash
 echo 'deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.cloudflare.com/cloudflared any main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
 ```
@@ -154,7 +154,7 @@ ingress:
   - service: http_status:404
 ```
 6. Route DNS: ` cloudflared tunnel route dns my-haproxy-tunnel yourdomain.com `
-7. Test run: ` cloudflared tunnel --config /etc/cloudflared/config.yml run `
+7. Test run: ` cloudflared tunnel --config /root/.cloudflared/config.yml run `
 
 ### Test Tunnel
 
